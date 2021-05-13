@@ -5,7 +5,7 @@ const app = express();
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('./config/ppConfig');
-
+const isLoggedIn = require('./middleware/isLoggedIn');
 
 const SECRET_SESSION = process.env.SECRET_SESSION;
 // console.log(SECRET_SESSION);
@@ -30,8 +30,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(passport.initialize());      // Initialize passport
-app.use(passport.session());         // Add a session
+app.use(passport.initialize()); // Initialize passport
+app.use(passport.session()); // Add a session
 
 app.get('/', (req, res) => {
   res.render('index');
