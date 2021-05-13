@@ -1,8 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy
 
-// database
-const db = require('../models');
+const db = require('../models'); //database
 
 const STRATEGY = new LocalStrategy({
     usernameField: 'email',         // looks for an email field as the username
