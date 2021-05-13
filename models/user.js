@@ -1,4 +1,6 @@
 'use strict';
+const bcrypt = require('bcrypt');
+
 const {
   Model
 } = require('sequelize');
@@ -45,5 +47,24 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'user',
   });
 
-    return user; //add functions above
+
+  user.addHook('beforeCreate', (pendingUser) => {
+    let hash = bcrypt.hashSync(pendingUser.password, 12);
+    pendingUser.password = hash;
+  })
+
+  user.prototype.validPassword = function(typedPassword) {
+    let isCorrectPassword = bcrypt.compareSync(typedPassword, this.password)
+
+    return isCorrectPassword
+  }
+
+  user.prototype.toJSON = function() {
+    let userData = this.get();
+    delete userData.password; // it doesn't delete from database, only removes it
+
+    return userData;
+  }
+
+  return user; //add functions above
 };
